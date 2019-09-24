@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
+
+    public Player() : base(Constants.PLAYER_RANGE)
+    {
+        
+    }
     // Start is called before the first frame update
     void Start()
     {
