@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Game
@@ -8,9 +9,15 @@ namespace Game
         private const string GAME_CONTROLLER_TAG = "GameController";
         private const string CELL_GRID_TAG = "CellGrid";
         private static GridController gridController;
-        private static CellGridCreator cellGridCreator;
+        private static List<LevelCellGrid> levelCellGrids = new List<LevelCellGrid>();
 
-        public static CellGridCreator CellGridCreator
+        public static List<LevelCellGrid> LevelCellGrids
+        {
+            get => levelCellGrids;
+            set => levelCellGrids = value;
+        }
+
+        /*public static CellGridCreator CellGridCreator
         {
             get
             {
@@ -18,7 +25,7 @@ namespace Game
                     cellGridCreator = GameObject.Find(CELL_GRID_TAG).GetComponent<CellGridCreator>();
                 return cellGridCreator;
             }
-        }
+        }*/
 
         public static GridController GridController
         {

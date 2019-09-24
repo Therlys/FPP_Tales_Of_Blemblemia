@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private Tilemap level3Tilemap;
-    [SerializeField] private Tilemap level1Tilemap;
+    [SerializeField] private string startingSceneName;
     void Start()
     {
-        StartCoroutine(LoadLevel("Level3"));
+        StartCoroutine(LoadLevel(startingSceneName));
     }
     
     private IEnumerator LoadLevel(string levelname)
@@ -21,16 +22,6 @@ public class GameController : MonoBehaviour
         if(!SceneManager.GetSceneByName(levelname).isLoaded)
             yield return SceneManager.LoadSceneAsync(levelname, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelname));
-        Tilemap tilemapToLoad;
-        if (levelname == "Level1")
-        {
-            tilemapToLoad = level1Tilemap;
-        }
-        else
-        {
-            tilemapToLoad = level3Tilemap;
-        }
-        Finder.CellGridCreator.CreateCellsDependingOnTilemap(tilemapToLoad);
         //TODO : Hide Loading Screen
     }
 
