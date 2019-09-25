@@ -10,16 +10,6 @@ namespace Game
         private const string CELL_GRID_TAG = "CellGrid";
         private static GridController gridController;
 
-        /*public static CellGridCreator CellGridCreator
-        {
-            get
-            {
-                if (cellGridCreator == null)
-                    cellGridCreator = GameObject.Find(CELL_GRID_TAG).GetComponent<CellGridCreator>();
-                return cellGridCreator;
-            }
-        }*/
-
         public static GridController GridController
         {
             get
