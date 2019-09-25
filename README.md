@@ -1,15 +1,12 @@
 # Tales of Blemblemia - FPP
 
-```
-À faire : Écrire une courte description du projet ici. Remplacer le titre de ce document par le nom de votre jeu.
+Ce FPP permet d'expérimenter la mécanique principale du jeu Tales of Blemblemia, soit le déplacement d'un personnage sur une grille.
 
-```
+# Fonctionalités implémentées
 
-```
-À faire : Mettre à jour les liens dans ce document vers votre dépôt. 
-Par exemple : 
-   https://gitlab.com/csfpwmjv/projet-synthese/starter-game.git
-```
+* Sélection d'un personnage allié
+* Attaque d'un ennemi
+* ...
 
 ## Auteurs
 
