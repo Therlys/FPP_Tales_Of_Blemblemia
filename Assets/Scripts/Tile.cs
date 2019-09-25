@@ -62,8 +62,16 @@ public abstract class Tile : MonoBehaviour
                 if (character is Enemy)
                 {
                     // Attaque un ennemi
-                    gridController.SelectedCharacter.Attack(character);
-                    gridController.DeselectCharacter();
+                    if (avalaibiltyDisplayed)
+                    {
+                        gridController.SelectedCharacter.Attack(character);
+                        gridController.SelectedCharacter.MoveTo(this);
+                        gridController.DeselectCharacter();
+                    }
+                    else
+                    {
+                        gridController.DeselectCharacter();
+                    }
                 }
                 else if (selectedCharacter == character)
                 {
@@ -129,6 +137,7 @@ public abstract class Tile : MonoBehaviour
 
     private void DisplayTileAttackable()
     {
+        avalaibiltyDisplayed = true;
         image.sprite = gridController.AttackableTileSprite;
     }
     
