@@ -6,7 +6,8 @@ public abstract class Character : MonoBehaviour
 {
     private Tile currentTile = null;
     [SerializeField] private Vector2Int initialPosition;
-
+    private int healthPoints;
+    
     private readonly int range;
     public int Range => range;
 
@@ -37,5 +38,15 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForEndOfFrame();
         MoveTo(Finder.GridController.GetTile(initialPosition.x, initialPosition.y));
     }
-    
+
+    public void Attack(Character character)
+    {
+        character.Die();
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
 }
