@@ -1,12 +1,14 @@
 # Tales of Blemblemia - FPP
 
-Ce FPP permet d'expérimenter la mécanique principale du jeu Tales of Blemblemia, soit le déplacement d'un personnage sur une grille.
+Ce FPP permet d'expérimenter la mécanique principale du jeu intitulé Tales of Blemblemia, soit le déplacement du personnage sur une grille à l'aide de la souris.
 
 # Fonctionalités implémentées
 
-* Sélection d'un personnage allié
+* Sélection du personnage
+* Déplacement du personnage
 * Attaque d'un ennemi
-* ...
+* Génération automatique de la grille
+* Mécanique de tour
 
 ## Auteurs
 
