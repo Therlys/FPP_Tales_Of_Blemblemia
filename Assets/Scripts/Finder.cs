@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Game
 {
-    public static class Finder
+    /*public static class Finder
     {
         private const string GAME_CONTROLLER_TAG = "GameController";
         private const string CELL_GRID_TAG = "CellGrid";
@@ -19,5 +19,5 @@ namespace Game
                 return gridController;
             }
         }
-    }
+    }*/
 }

@@ -36,7 +36,7 @@ public abstract class Character : MonoBehaviour
     private IEnumerator InitPosition()
     {
         yield return new WaitForEndOfFrame();
-        MoveTo(Finder.GridController.GetTile(initialPosition.x, initialPosition.y));
+        MoveTo(Utils.Finder.GridController.GetTile(initialPosition.x, initialPosition.y));
     }
 
     public void Attack(Character character)
