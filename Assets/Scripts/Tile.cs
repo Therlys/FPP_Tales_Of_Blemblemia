@@ -43,28 +43,61 @@ public abstract class Tile : MonoBehaviour
     private void OnCellClick()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        if (gridController.SelectedCharacter != null && avalaibiltyDisplayed && character == null)
+        var selectedCharacter = gridController.SelectedCharacter;
+        
+        // Si un personnage est sélectionné
+        if (character != null)
         {
-            Finder.GridController.HideTilesAvailability();
-            gridController.SelectedCharacter.MoveTo(this);
-            gridController.SelectCharacter(null);
+            // Si aucun personnage n'était sélectionné
+            if (selectedCharacter == null)
+            {
+                if (character is Ally)
+                {
+                    gridController.SelectCharacter(character);
+                    DisplayPossibleActions();
+                }
+            } 
+            else
+            {
+                if (character is Enemy)
+                {
+                    // Attaque un ennemi
+                    gridController.SelectedCharacter.Attack(character);
+                    gridController.DeselectCharacter();
+                }
+                else if (selectedCharacter == character)
+                {
+                    // Sélectionne l'unité déjà sélectionné
+                    gridController.DeselectCharacter();
+                }
+                else
+                {
+                    // Sélectionne une autre unité
+                    gridController.SelectCharacter(character);
+                    DisplayPossibleActions();
+                }
+            }
         }
-        if(character == null) return;
-        if (character == gridController.SelectedCharacter)
+        else
         {
-            gridController.HideTilesAvailability();
+            if (selectedCharacter != null && avalaibiltyDisplayed)
+            {
+                selectedCharacter.MoveTo(this);
+            }
             gridController.DeselectCharacter();
-            return;
         }
-        DisplayTileSelected();
-        gridController.SelectCharacter(character);
+    }
+
+    private void DisplayPossibleActions()
+    {
+        image.sprite = gridController.SelectedSprite;
         for (int i = -character.Range; i <= character.Range; i++)
         {
             for(int j = -character.Range; j <= character.Range ; j++)
             {
                 if (i != 0 || j != 0)
                 {
-                    if (position.x + i >= 0 && position.y + j >= 0 && position.x + i < gridController.NbColumns && position.y + j < gridController.NbColumns)
+                    if (position.x + i >= 0 && position.y + j >= 0 && position.x + i < gridController.NbColumns && position.y + j < gridController.NbLines)
                     {
                         if (Math.Abs(i) + Math.Abs(j) <= character.Range)
                         {
@@ -73,17 +106,30 @@ public abstract class Tile : MonoBehaviour
                             {
                                 tile.DisplayTileAvailability();
                             }
+                            else
+                            {
+                                if (tile.character is Enemy)
+                                {
+                                    tile.DisplayTileAttackable();
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
+    
 
     private void DisplayTileAvailability()
     {
         avalaibiltyDisplayed = true;
         image.sprite = gridController.AvailabilitySprite;
+    }
+
+    private void DisplayTileAttackable()
+    {
+        image.sprite = gridController.AttackableTileSprite;
     }
     
     public void HideTileAvailability()
@@ -92,11 +138,6 @@ public abstract class Tile : MonoBehaviour
         image.sprite = gridController.NormalSprite;
     }
 
-    public void DisplayTileSelected()
-    {
-        image.sprite = gridController.SelectedSprite;
-    }
-    
     public bool LinkCharacter(Character character)
     {
         if (!IsWalkable) return false;
