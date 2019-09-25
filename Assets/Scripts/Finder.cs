@@ -9,13 +9,6 @@ namespace Game
         private const string GAME_CONTROLLER_TAG = "GameController";
         private const string CELL_GRID_TAG = "CellGrid";
         private static GridController gridController;
-        private static List<LevelCellGrid> levelCellGrids = new List<LevelCellGrid>();
-
-        public static List<LevelCellGrid> LevelCellGrids
-        {
-            get => levelCellGrids;
-            set => levelCellGrids = value;
-        }
 
         /*public static CellGridCreator CellGridCreator
         {
