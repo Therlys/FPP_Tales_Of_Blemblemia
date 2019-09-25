@@ -2,7 +2,7 @@
 
 Ce FPP permet d'expérimenter la mécanique principale du jeu intitulé Tales of Blemblemia, soit le déplacement du personnage sur une grille à l'aide de la souris.
 
-# Fonctionalités implémentées
+## Fonctionalités implémentées
 
 * Sélection du personnage
 * Déplacement du personnage
