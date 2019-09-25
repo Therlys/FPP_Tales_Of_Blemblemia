@@ -16073,6 +16073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88fc90dd7db947c4db9ef177b7ee84ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingSceneName: SampleScene
 --- !u!4 &947872400
 Transform:
   m_ObjectHideFlags: 0
@@ -28232,7 +28233,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
