@@ -35,7 +35,7 @@ public abstract class Tile : MonoBehaviour
     protected void Start()
     {
         int index = transform.GetSiblingIndex();
-        int nbColumns = Finder.GridController.NbColumns;
+        int nbColumns = Utils.Finder.GridController.NbColumns;
         position.x = index % nbColumns;
         position.y = index / nbColumns;
     }

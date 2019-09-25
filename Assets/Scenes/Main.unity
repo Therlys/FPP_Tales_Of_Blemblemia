@@ -157,7 +157,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.6958063, g: 1, b: 0.627451, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -214,12 +214,12 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 92cd59a41a25e754ca47fc0f9e9f6c9e, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -329,11 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88fc90dd7db947c4db9ef177b7ee84ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level3Tilemap: {fileID: 3017877023331438070, guid: e21f61ead081a064caf93dbdb6c7404e,
-    type: 3}
-  level1Tilemap: {fileID: 3351937995859999313, guid: f82247e860a19a548b13ca788ae32d68,
-    type: 3}
-  startingSceneName: Level3
+  startingSceneName: Level1
 --- !u!4 &1192157624
 Transform:
   m_ObjectHideFlags: 0

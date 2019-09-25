@@ -28,6 +28,11 @@ namespace Game
         [SerializeField] private Tilemap tilemap = null;
         public void CreateCellsDependingOnTilemap()
         {
+            if (transform.childCount > 0)
+            {
+                DeleteGridChildren();
+            }
+            
             CheckForExceptions();
             BoundsInt bounds = tilemap.cellBounds;
             TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
@@ -118,6 +123,15 @@ namespace Game
                 {
                     Instantiate(emptyCellPrefab, transform);
                 }
+            }
+        }
+
+        private void DeleteGridChildren()
+        {
+            int childs = transform.childCount;
+            for (int i = childs - 1; i >= 0; i--)
+            {
+                GameObject.DestroyImmediate(transform.GetChild(i).gameObject);
             }
         }
     }
