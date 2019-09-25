@@ -26,8 +26,8 @@ namespace Game
         [SerializeField] private Tilemap tilemap = null;
         public void CreateCellsDependingOnTilemap()
         {
-            CheckForExceptions();
             ClearGrid();
+            CheckForExceptions();
             BoundsInt bounds = tilemap.cellBounds;
             TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
             Rect cellGridRectangle = GetComponent<RectTransform>().rect;
@@ -121,9 +121,9 @@ namespace Game
 
         private void ClearGrid()
         {
-            foreach (Transform child in transform) 
+            for (int i = transform.childCount - 1; i >= 0; i--) 
             {
-                DestroyImmediate(child.gameObject);
+                DestroyImmediate(transform.GetChild(i).gameObject);
             }
         }
         

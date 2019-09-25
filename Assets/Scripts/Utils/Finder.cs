@@ -24,7 +24,6 @@ namespace Utils
         {
             get
             {
-                Debug.Log(GameObject.FindWithTag(GRID_CONTROLLER_TAG).GetComponent<GridController>());
                 if (gridController == null)
                     gridController = GameObject.FindWithTag(GRID_CONTROLLER_TAG).GetComponent<GridController>();
                 return gridController;
