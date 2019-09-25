@@ -22,21 +22,15 @@ namespace Game
         [SerializeField] private TileBase forestTile = null;
         [SerializeField] private TileBase obstacleTile = null;
         [SerializeField] private TileBase fortressTile = null;
-        [Header("Grid")]
-        [SerializeField] private GameObject grid = null;
         [Header("Tilemap")]
         [SerializeField] private Tilemap tilemap = null;
         public void CreateCellsDependingOnTilemap()
         {
-            if (transform.childCount > 0)
-            {
-                DeleteGridChildren();
-            }
-            
             CheckForExceptions();
+            ClearGrid();
             BoundsInt bounds = tilemap.cellBounds;
             TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
-            Rect cellGridRectangle = grid.GetComponent<RectTransform>().rect;
+            Rect cellGridRectangle = GetComponent<RectTransform>().rect;
             int minX = GetMinX(bounds,cellGridRectangle);
             int minY = GetMinY(bounds,cellGridRectangle);
             int maxX = GetMaxX(bounds,cellGridRectangle);
@@ -63,7 +57,6 @@ namespace Game
             if (forestTile == null) throw new Exception("Null Forest Tile");
             if (obstacleTile == null) throw new Exception("Null Obstacle Tile");
             if (fortressTile == null) throw new Exception("Null Fortress Tile");
-            if (grid == null) throw new Exception("Null Grid");
             if (tilemap == null) throw new Exception("Null Tilemap");
         }
 
@@ -126,13 +119,13 @@ namespace Game
             }
         }
 
-        private void DeleteGridChildren()
+        private void ClearGrid()
         {
-            int childs = transform.childCount;
-            for (int i = childs - 1; i >= 0; i--)
+            foreach (Transform child in transform) 
             {
-                GameObject.DestroyImmediate(transform.GetChild(i).gameObject);
+                DestroyImmediate(child.gameObject);
             }
         }
+        
     }
 }
