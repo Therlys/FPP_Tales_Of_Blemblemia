@@ -10,8 +10,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] private string startingSceneName;
+    [SerializeField] private string startingSceneName = "";
     private CharacterOwner currentPlayer;
     private HumanPlayer player1;
     private ComputerPlayer player2;

@@ -10,11 +10,11 @@ using UnityEngine.UI;
 
 namespace Game
 {
-    public class CellGridCreator : MonoBehaviour
+    public class GridGenerator : MonoBehaviour
     {
         /*Ajouter un else if pour tous les nouveaux prefabs et tiles dans la méthode*/
         [Header("Prefabs")]
-        [SerializeField] private GameObject emptyCellPrefab;
+        [SerializeField] private GameObject emptyCellPrefab = null;
         [SerializeField] private GameObject forestCellPrefab = null;
         [SerializeField] private GameObject obstacleCellPrefab = null;
         [SerializeField] private GameObject fortressCellPrefab = null;

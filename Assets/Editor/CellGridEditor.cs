@@ -4,18 +4,18 @@ using UnityEngine;
 namespace Game
 {
     
-    [CustomEditor(typeof(CellGridCreator))]
+    [CustomEditor(typeof(GridGenerator))]
     public class CellGridEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
             
-            CellGridCreator cellGridCreator = (CellGridCreator)target;
+            GridGenerator gridGenerator = (GridGenerator)target;
             
-            if(GUILayout.Button("Build Cell Grid"))
+            if(GUILayout.Button("Generate Grid"))
             {
-                cellGridCreator.CreateCellsDependingOnTilemap();
+                gridGenerator.CreateCellsDependingOnTilemap();
             }
         }
     }

@@ -7,15 +7,15 @@ using UnityEngine.UI;
 public class GridController : MonoBehaviour
 {
     private GridLayoutGroup gridLayoutGroup;
-    [SerializeField] private Sprite availabilitySprite = null;
-    [SerializeField] private Sprite normalSprite = null;
-    [SerializeField] private Sprite selectedSprite = null;
+    [SerializeField] private Sprite movementTileSprite = null;
+    [SerializeField] private Sprite normalTileSprite = null;
+    [SerializeField] private Sprite selectedTileSprite = null;
     [SerializeField] private Sprite attackableTileSprite = null;
 
     public Character SelectedCharacter { get; private set; } = null;
-    public Sprite AvailabilitySprite => availabilitySprite;
-    public Sprite NormalSprite => normalSprite;
-    public Sprite SelectedSprite => selectedSprite;
+    public Sprite AvailabilitySprite => movementTileSprite;
+    public Sprite NormalSprite => normalTileSprite;
+    public Sprite SelectedSprite => selectedTileSprite;
     public Sprite AttackableTileSprite => attackableTileSprite;
 
     public int NbColumns { get; private set; } = 0;
