@@ -18,6 +18,8 @@ public class GridController : MonoBehaviour
     public Sprite SelectedSprite => selectedTileSprite;
     public Sprite AttackableTileSprite => attackableTileSprite;
 
+    public bool ACharacterIsCurrentlySelected => SelectedCharacter != null;
+
     public int NbColumns { get; private set; } = 0;
     public int NbLines { get; private set; } = 0;
     
@@ -39,7 +41,7 @@ public class GridController : MonoBehaviour
         SelectedCharacter = null;
         foreach (Transform child in transform)
         {
-            child.GetComponent<Tile>().HideTileAvailability();
+            child.GetComponent<Tile>().HideActionPossibility();
         }
     }
     

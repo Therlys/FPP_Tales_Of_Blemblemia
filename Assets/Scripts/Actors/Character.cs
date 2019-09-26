@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using Utils;
 
@@ -7,8 +8,10 @@ public abstract class Character : MonoBehaviour
     private Tile currentTile = null;
     [SerializeField] private Vector2Int initialPosition;
     private int healthPoints = 6;
-    private bool isPlayable = false;
+    private bool canPlay = false;
     private int movesLeft = 3;
+    private GridController gridController;
+    public bool IsCurrentlySelected => gridController.SelectedCharacter == this;
 
     public int MovesLeft
     {
@@ -16,10 +19,10 @@ public abstract class Character : MonoBehaviour
         set => movesLeft = value;
     }
 
-    public bool IsPlayable
+    public bool CanPlay
     {
-        get => isPlayable;
-        set => isPlayable = value;
+        get => canPlay;
+        set => canPlay = value;
     }
 
     private readonly int range;
@@ -28,6 +31,11 @@ public abstract class Character : MonoBehaviour
     protected Character(int range)
     {
         this.range = range;
+    }
+
+    private void Awake()
+    {
+        gridController = Finder.GridController;
     }
 
     protected void Start()
@@ -45,12 +53,14 @@ public abstract class Character : MonoBehaviour
         MovesLeft -= 1;
         if (currentTile != null) currentTile.UnlinkCharacter();
         currentTile = tile;
-        if(currentTile != null && currentTile.LinkCharacter(this)) MoveTo(currentTile.Position);
+        if(currentTile != null && currentTile.LinkCharacter(this)) MoveTo(currentTile.WorldPosition);
     }
+    
 
     private IEnumerator InitPosition()
     {
         yield return new WaitForEndOfFrame();
+        MovesLeft += 1;
         MoveTo(Utils.Finder.GridController.GetTile(initialPosition.x, initialPosition.y));
     }
 

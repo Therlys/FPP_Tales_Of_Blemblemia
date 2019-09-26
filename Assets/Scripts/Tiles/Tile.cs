@@ -7,17 +7,17 @@ using Utils;
 
 public abstract class Tile : MonoBehaviour
 {
-    private Button button;
+    private Button tileButton;
     private readonly TileType tileType;
-    private Image image;
-    private Character character;
+    private Image tileImage;
+    private Character linkedCharacter;
     private GridController gridController;
-    private bool AvalaibiltyDisplayed => image.sprite = gridController.AvailabilitySprite;
-    
-    public bool IsWalkable => tileType != TileType.OBSTACLE;
-    public bool IsAvailable => IsWalkable && character == null;
-    private Vector3 position;
-    public Vector3 Position => transform.position;
+    private bool IsPossibleAction => tileImage.sprite != gridController.NormalSprite;
+    private bool IsWalkable => tileType != TileType.OBSTACLE;
+    private bool IsAvailable => IsWalkable && !IsOccupiedByACharacter;
+    private bool IsOccupiedByACharacter => linkedCharacter != null;
+    private Vector3 positionInGrid;
+    public Vector3 WorldPosition => transform.position;
 
     protected Tile(TileType tileType)
     {
@@ -26,103 +26,88 @@ public abstract class Tile : MonoBehaviour
     
     protected virtual void Awake()
     {
-        button = GetComponent<Button>();
-        image = GetComponent<Image>();
-        button.onClick.AddListener(OnCellClick); 
+        tileButton = GetComponent<Button>();
+        tileImage = GetComponent<Image>();
+        tileButton.onClick.AddListener(OnCellClick); 
         gridController = transform.parent.GetComponent<GridController>();
     }
 
     protected void Start()
     {
         int index = transform.GetSiblingIndex();
-        int nbColumns = Utils.Finder.GridController.NbColumns;
-        position.x = index % nbColumns;
-        position.y = index / nbColumns;
+        positionInGrid.x = index % Finder.GridController.NbColumns;
+        positionInGrid.y = index / Finder.GridController.NbLines;
     }
 
     private void OnCellClick()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        var selectedCharacter = gridController.SelectedCharacter;
-        
-        // Si un personnage est sélectionné
-        if (character != null)
+        if (IsOccupiedByACharacter)
         {
-            // Si aucun personnage n'était sélectionné
-            if (selectedCharacter == null)
+            if (!gridController.ACharacterIsCurrentlySelected)
             {
-                if (character is Ally && character.IsPlayable)
+                if (linkedCharacter is Ally && linkedCharacter.CanPlay)
                 {
-                    gridController.SelectCharacter(character);
+                    gridController.SelectCharacter(linkedCharacter);
                     DisplayPossibleActions();
                 }
             } 
             else
             {
-                if (character is Enemy && gridController.SelectedCharacter.IsPlayable)
+                if (linkedCharacter is Enemy && gridController.SelectedCharacter.CanPlay)
                 {
-                    // Attaque un ennemi
-                    if (AvalaibiltyDisplayed)
+                    if (IsPossibleAction)
                     {
-                        gridController.SelectedCharacter.Attack(character);
-                        if (character.Died())
+                        gridController.SelectedCharacter.Attack(linkedCharacter);
+                        if (linkedCharacter.Died())
                         {
-                            character.Die();
+                            linkedCharacter.Die();
                             gridController.SelectedCharacter.MoveTo(this);
                         }
-                        gridController.DeselectCharacter();
                     }
-                    else
-                    {
-                        gridController.DeselectCharacter();
-                    }
+                    gridController.DeselectCharacter();
                 }
-                else if (selectedCharacter == character)
+                else if (linkedCharacter.IsCurrentlySelected)
                 {
-                    // Sélectionne l'unité déjà sélectionné
                     gridController.DeselectCharacter();
                 }
                 else
                 {
-                    // Sélectionne une autre unité
-                    gridController.SelectCharacter(character);
+                    gridController.SelectCharacter(linkedCharacter);
                     DisplayPossibleActions();
                 }
             }
         }
         else
         {
-            if (selectedCharacter != null && AvalaibiltyDisplayed)
-            {
-                selectedCharacter.MoveTo(this);
-            }
+            if (gridController.ACharacterIsCurrentlySelected && IsPossibleAction) gridController.SelectedCharacter.MoveTo(this);
             gridController.DeselectCharacter();
         }
     }
 
     private void DisplayPossibleActions()
     {
-        image.sprite = gridController.SelectedSprite;
-        for (int i = -character.Range; i <= character.Range; i++)
+        tileImage.sprite = gridController.SelectedSprite;
+        for (int i = -linkedCharacter.Range; i <= linkedCharacter.Range; i++)
         {
-            for(int j = -character.Range; j <= character.Range ; j++)
+            for(int j = -linkedCharacter.Range; j <= linkedCharacter.Range ; j++)
             {
                 if (i != 0 || j != 0)
                 {
-                    if (position.x + i >= 0 && position.y + j >= 0 && position.x + i < gridController.NbColumns && position.y + j < gridController.NbLines)
+                    if (positionInGrid.x + i >= 0 && positionInGrid.y + j >= 0 && positionInGrid.x + i < gridController.NbColumns && positionInGrid.y + j < gridController.NbLines)
                     {
-                        if (Math.Abs(i) + Math.Abs(j) <= character.Range)
+                        if (Math.Abs(i) + Math.Abs(j) <= linkedCharacter.Range)
                         {
-                            Tile tile = gridController.GetTile((int)position.x + i, j + (int)position.y);
+                            Tile tile = gridController.GetTile((int)positionInGrid.x + i, j + (int)positionInGrid.y);
                             if (tile.IsAvailable)
                             {
-                                tile.DisplayTileAvailability();
+                                tile.DisplayMoveActionPossibility();
                             }
                             else
                             {
-                                if (tile.character is Enemy)
+                                if (tile.linkedCharacter is Enemy)
                                 {
-                                    tile.DisplayTileAttackable();
+                                    if(Math.Abs(i) == 1 && Math.Abs(j) == 0 || Math.Abs(i) == 0 && Math.Abs(j) == 1) tile.DisplayAttackActionPossibility();
                                 }
                             }
                         }
@@ -133,32 +118,32 @@ public abstract class Tile : MonoBehaviour
     }
     
 
-    private void DisplayTileAvailability()
+    private void DisplayMoveActionPossibility()
     {
-        image.sprite = gridController.AvailabilitySprite;
+        tileImage.sprite = gridController.AvailabilitySprite;
     }
 
-    private void DisplayTileAttackable()
+    private void DisplayAttackActionPossibility()
     {
-        image.sprite = gridController.AttackableTileSprite;
+        tileImage.sprite = gridController.AttackableTileSprite;
     }
     
-    public void HideTileAvailability()
+    public void HideActionPossibility()
     {
-        image.sprite = gridController.NormalSprite;
+        tileImage.sprite = gridController.NormalSprite;
     }
 
     public bool LinkCharacter(Character character)
     {
         if (!IsWalkable) return false;
-        this.character = character;
+        this.linkedCharacter = character;
         return character != null;
     }
 
     public bool UnlinkCharacter()
     {
-        if (character == null) return false;
-        character = null;
+        if (linkedCharacter == null) return false;
+        linkedCharacter = null;
         return true;
     }
 }

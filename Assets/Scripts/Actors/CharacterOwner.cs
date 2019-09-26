@@ -18,16 +18,11 @@ namespace Game
             set => hasLost = value;
         }
 
-        public CharacterOwner()
-        {
-            //Players.Add(this);
-        }
-
         public void Play()
         {
             for(int i = 0; i < playableCharacters.Count; i++)
             {
-                if (playableCharacters[i].IsPlayable && playableCharacters[i].MovesLeft <= 0)
+                if (playableCharacters[i].CanPlay && playableCharacters[i].MovesLeft <= 0)
                 {
                     RemoveCharacterFromPlayableCharacters(playableCharacters[i]);
                 }
@@ -81,7 +76,7 @@ namespace Game
         {
             foreach (Character character in playableCharacters)
             {
-                character.IsPlayable = false;
+                character.CanPlay = false;
             }
         }
 
@@ -89,7 +84,7 @@ namespace Game
         {
             foreach (Character character in playableCharacters)
             {
-                character.IsPlayable = true;
+                character.CanPlay = true;
                 character.MovesLeft = 3;
             }
         }
@@ -118,7 +113,7 @@ namespace Game
 
         public void RemoveOwnedCharacter(Character character)
         {
-            character.IsPlayable = false;
+            character.CanPlay = false;
             if (playableCharacters.Contains(character))
                 playableCharacters.Remove(character);
             if (ownedCharacters.Contains(character))
@@ -127,7 +122,7 @@ namespace Game
 
         public void RemoveCharacterFromPlayableCharacters(Character character)
         {
-            character.IsPlayable = false;
+            character.CanPlay = false;
             playableCharacters.Remove(character);
         }
     }

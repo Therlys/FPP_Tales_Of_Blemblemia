@@ -1,16 +1,13 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Actors;
+using DefaultNamespace;
 using Game;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private string startingSceneName = "";
+    [SerializeField] private string startingSceneName = Constants.LEVEL_3_SCENE_NAME;
     private CharacterOwner currentPlayer;
     private HumanPlayer player1;
     private ComputerPlayer player2;
@@ -21,53 +18,58 @@ public class GameController : MonoBehaviour
     
     private IEnumerator LoadLevel(string levelname)
     {
-        //TODO : Show Loading Screen
+
         if(!SceneManager.GetSceneByName(levelname).isLoaded)
             yield return SceneManager.LoadSceneAsync(levelname, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelname));
-        if (SceneManager.GetSceneByName(startingSceneName).isLoaded && startingSceneName == "SampleScene")
+        if (SceneManager.GetSceneByName(startingSceneName).isLoaded)
         {
-            Debug.Log("Loading the fucking level...");
+            Debug.Log("Loading " + levelname);
             player1 = new HumanPlayer();
             player2 = new ComputerPlayer();
-            player1.AddOwnedCharacter(GameObject.Find("Franklem").GetComponent<Franklem>());
-            player2.AddOwnedCharacter(GameObject.Find("Pleblem").GetComponent<Pleblem>());
-            player2.AddOwnedCharacter(GameObject.Find("Pleblem (1)").GetComponent<Pleblem>());
-            player2.AddOwnedCharacter(GameObject.Find("Pleblem (2)").GetComponent<Pleblem>());
-            player2.AddOwnedCharacter(GameObject.Find("Pleblem (3)").GetComponent<Pleblem>());
-            player2.AddOwnedCharacter(GameObject.Find("Pleblem (4)").GetComponent<Pleblem>());
+            
+            object[] allies = FindObjectsOfType(typeof (Ally));
+            foreach (var ally in allies)
+            {
+                var character = (Character) ally;
+                player1.AddOwnedCharacter(character);
+            }
+            
+            object[] enemies = FindObjectsOfType(typeof (Enemy));
+            foreach (var enemy in enemies)
+            {
+                var character = (Character) enemy;
+                player2.AddOwnedCharacter(character);
+            }
+            
             CharacterOwner.Players.Add(player1);
             CharacterOwner.Players.Add(player2);
             currentPlayer = player1;
             player1.OnTurnGiven();
         }
-        
-        //TODO : Hide Loading Screen
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        
         if (currentPlayer == null) return;
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            currentPlayer = CharacterOwner.Players.Find(own => own is HumanPlayer);//currentPlayer.GiveTurnToNextPlayer();
+            currentPlayer = CharacterOwner.Players.Find(own => own is HumanPlayer);
             currentPlayer.OnTurnGiven();
+        }
+        if (currentPlayer.HasWon())
+        {
+            currentPlayer.Win();
+            if(SceneManager.GetSceneByName(startingSceneName).isLoaded) 
+                SceneManager.UnloadSceneAsync(startingSceneName);
         }
         if (currentPlayer.HasNoMoreMovableCharacters())
         {
             currentPlayer = currentPlayer.GiveTurnToNextPlayer();
             currentPlayer.OnTurnGiven();
-        }
-        else if (currentPlayer.HasWon())
-        {
-            currentPlayer.Win();
-            if(SceneManager.GetSceneByName(startingSceneName).isLoaded)
-            SceneManager.UnloadSceneAsync(startingSceneName);
-        }
-        else if (currentPlayer.HaveAllCharactersDied())
+        } 
+        if (currentPlayer.HaveAllCharactersDied())
         {
             currentPlayer.Lose();
         }
@@ -76,6 +78,7 @@ public class GameController : MonoBehaviour
             currentPlayer.Play();
         }
 
+        
         for(int i = CharacterOwner.Players.Count-1; i >= 0; i--)
         {
             if (CharacterOwner.Players[i].HasLost)
@@ -83,9 +86,9 @@ public class GameController : MonoBehaviour
                 if (currentPlayer == CharacterOwner.Players[i])
                 {
                     currentPlayer = CharacterOwner.Players[i].GiveTurnToNextPlayer();
-                    CharacterOwner.Players[i].RemoveFromPlayers();
-                    break;
                 }
+                CharacterOwner.Players[i].RemoveFromPlayers();
+                break;
             }
         }
     }
