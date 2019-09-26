@@ -13,4 +13,4 @@ Ce FPP permet d'expérimenter la mécanique principale du jeu intitulé Tales of
 ## Auteurs
 
 * **Jérémie Bertrand (1732982)** - *Programmeur*
-* **Mike Bédard (1733963)** - *Programmeur*
+* **Mike Bédard (1733163)** - *Programmeur*
