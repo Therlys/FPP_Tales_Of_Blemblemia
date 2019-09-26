@@ -6,8 +6,22 @@ public abstract class Character : MonoBehaviour
 {
     private Tile currentTile = null;
     [SerializeField] private Vector2Int initialPosition;
-    private int healthPoints;
-    
+    private int healthPoints = 12;
+    private bool isPlayable = false;
+    private int movesLeft = 3;
+
+    public int MovesLeft
+    {
+        get => movesLeft;
+        set => movesLeft = value;
+    }
+
+    public bool IsPlayable
+    {
+        get => isPlayable;
+        set => isPlayable = value;
+    }
+
     private readonly int range;
     public int Range => range;
 
@@ -28,6 +42,7 @@ public abstract class Character : MonoBehaviour
 
     public void MoveTo(Tile tile)
     {
+        MovesLeft -= 1;
         if (currentTile != null) currentTile.UnlinkCharacter();
         currentTile = tile;
         if(currentTile != null && currentTile.LinkCharacter(this)) MoveTo(currentTile.Position);
@@ -41,12 +56,18 @@ public abstract class Character : MonoBehaviour
 
     public void Attack(Character character)
     {
-        character.Die();
+        MovesLeft -= 1;
+        character.healthPoints -= 2;
     }
 
     public void Die()
     {
         Destroy(gameObject);
+    }
+
+    public bool Died()
+    {
+        return healthPoints <= 0;
     }
 
 }
