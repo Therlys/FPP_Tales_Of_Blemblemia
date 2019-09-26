@@ -51,7 +51,7 @@ public abstract class Tile : MonoBehaviour
             // Si aucun personnage n'était sélectionné
             if (selectedCharacter == null)
             {
-                if (character is Ally)
+                if (character is Ally && character.IsPlayable)
                 {
                     gridController.SelectCharacter(character);
                     DisplayPossibleActions();
@@ -59,13 +59,17 @@ public abstract class Tile : MonoBehaviour
             } 
             else
             {
-                if (character is Enemy)
+                if (character is Enemy && gridController.SelectedCharacter.IsPlayable)
                 {
                     // Attaque un ennemi
                     if (avalaibiltyDisplayed)
                     {
                         gridController.SelectedCharacter.Attack(character);
-                        gridController.SelectedCharacter.MoveTo(this);
+                        if (character.Died())
+                        {
+                            character.Die();
+                            gridController.SelectedCharacter.MoveTo(this);
+                        }
                         gridController.DeselectCharacter();
                     }
                     else
