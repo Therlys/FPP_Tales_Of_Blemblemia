@@ -5,7 +5,7 @@ namespace Game
 {
     
     [CustomEditor(typeof(GridGenerator))]
-    public class CellGridEditor : Editor
+    public class GridGeneratorEditor : Editor
     {
         public override void OnInspectorGUI()
         {
@@ -15,7 +15,12 @@ namespace Game
             
             if(GUILayout.Button("Generate Grid"))
             {
-                gridGenerator.CreateCellsDependingOnTilemap();
+                gridGenerator.GenerateGrid();
+            }
+            
+            if(GUILayout.Button("Clear Grid"))
+            {
+                gridGenerator.ClearGrid();
             }
         }
     }

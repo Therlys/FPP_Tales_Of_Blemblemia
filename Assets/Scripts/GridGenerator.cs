@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Boo.Lang;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,52 +13,40 @@ namespace Game
 {
     public class GridGenerator : MonoBehaviour
     {
-        /*Ajouter un else if pour tous les nouveaux prefabs et tiles dans la méthode*/
         [Header("Prefabs")]
         [SerializeField] private GameObject emptyCellPrefab = null;
         [SerializeField] private GameObject forestCellPrefab = null;
         [SerializeField] private GameObject obstacleCellPrefab = null;
         [SerializeField] private GameObject fortressCellPrefab = null;
+        
         [Header("Tiles")]
         [SerializeField] private TileBase forestTile = null;
         [SerializeField] private TileBase obstacleTile = null;
         [SerializeField] private TileBase fortressTile = null;
+        
         [Header("Tilemap")]
         [SerializeField] private Tilemap tilemap = null;
-        public void CreateCellsDependingOnTilemap()
+
+        public void CreateGridCells()
         {
-            ClearGrid();
-            CheckForExceptions();
             BoundsInt bounds = tilemap.cellBounds;
             TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
             Rect cellGridRectangle = GetComponent<RectTransform>().rect;
-            int minX = GetMinX(bounds,cellGridRectangle);
-            int minY = GetMinY(bounds,cellGridRectangle);
-            int maxX = GetMaxX(bounds,cellGridRectangle);
-            int maxY = GetMaxY(bounds,cellGridRectangle);
+            
+            int minX = GetMinX(bounds, cellGridRectangle);
+            int minY = GetMinY(bounds, cellGridRectangle);
+            int maxX = GetMaxX(bounds, cellGridRectangle);
+            int maxY = GetMaxY(bounds, cellGridRectangle);
+            
             GetComponent<RectTransform>().sizeDelta = new Vector2(maxX - minX,maxY - minY);
-            for (int y = maxY - 1; y >= 0 + minY; y--) 
+            
+            for (int y = maxY - 1; y >= minY; y--) 
             {
-                for (int x = 0 + minX; x < maxX; x++) 
+                for (int x = minX; x < maxX; x++) 
                 {
-                    TileBase tile = allTiles[x + y * (bounds.size.x)];
-                    CreateCellDependingOnTile(tile);
+                    InstantiateCellPrefabFrom(allTiles[x + y * bounds.size.x]);
                 }
             }
-        }
-        
-        
-        private void CheckForExceptions()
-        {
-            if (tilemap == null) throw new Exception("Null Tilemap");
-            if (emptyCellPrefab == null) throw new Exception("Null Empty Cell Prefab");
-            if (forestCellPrefab == null) throw new Exception("Null Forest Cell Prefab");
-            if (obstacleCellPrefab == null) throw new Exception("Null Obstacle Cell Prefab");
-            if (fortressCellPrefab == null) throw new Exception("Null Fortress Cell Prefab");
-            if (forestTile == null) throw new Exception("Null Forest Tile");
-            if (obstacleTile == null) throw new Exception("Null Obstacle Tile");
-            if (fortressTile == null) throw new Exception("Null Fortress Tile");
-            if (tilemap == null) throw new Exception("Null Tilemap");
         }
 
         private int GetMinX(BoundsInt bounds, Rect cellGridRectangle)
@@ -89,43 +78,36 @@ namespace Game
         }
 
 
-        private void CreateCellDependingOnTile(TileBase tile)
+        private void InstantiateCellPrefabFrom(TileBase tile)
         {
-            if (tile == null)
+            var spawningPrefab = emptyCellPrefab;
+            if (tile == forestTile)
             {
-                GameObject.Instantiate(emptyCellPrefab, transform);
+                spawningPrefab = forestCellPrefab;
             }
-            else
+            else if (tile == obstacleTile)
             {
-                if (tile == forestTile)
-                {
-                    GameObject.Instantiate(forestCellPrefab, transform);
-                }
-
-                else if (tile == obstacleTile)
-                {
-                    GameObject.Instantiate(obstacleCellPrefab, transform);
-                }
-
-                else if (tile == fortressTile)
-                {
-                    GameObject.Instantiate(fortressCellPrefab, transform);
-                }
-                /*Ajouter un else if pour tous les nouveaux prefabs et tiles*/
-                else
-                {
-                    Instantiate(emptyCellPrefab, transform);
-                }
+                spawningPrefab = obstacleCellPrefab;
             }
+            else if (tile == fortressTile)
+            {
+                spawningPrefab = fortressCellPrefab;
+            }
+            Instantiate(spawningPrefab, transform);
         }
 
-        private void ClearGrid()
+        public void ClearGrid()
         {
             for (int i = transform.childCount - 1; i >= 0; i--) 
             {
                 DestroyImmediate(transform.GetChild(i).gameObject);
             }
         }
-        
+
+        public void GenerateGrid()
+        {
+            ClearGrid();
+            CreateGridCells();
+        }
     }
 }
