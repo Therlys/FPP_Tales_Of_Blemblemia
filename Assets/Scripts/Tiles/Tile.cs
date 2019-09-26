@@ -12,7 +12,7 @@ public abstract class Tile : MonoBehaviour
     private Image image;
     private Character character;
     private GridController gridController;
-    private bool avalaibiltyDisplayed = false;
+    private bool AvalaibiltyDisplayed => image.sprite = gridController.AvailabilitySprite;
     
     public bool IsWalkable => tileType != TileType.OBSTACLE;
     public bool IsAvailable => IsWalkable && character == null;
@@ -62,7 +62,7 @@ public abstract class Tile : MonoBehaviour
                 if (character is Enemy && gridController.SelectedCharacter.IsPlayable)
                 {
                     // Attaque un ennemi
-                    if (avalaibiltyDisplayed)
+                    if (AvalaibiltyDisplayed)
                     {
                         gridController.SelectedCharacter.Attack(character);
                         if (character.Died())
@@ -92,7 +92,7 @@ public abstract class Tile : MonoBehaviour
         }
         else
         {
-            if (selectedCharacter != null && avalaibiltyDisplayed)
+            if (selectedCharacter != null && AvalaibiltyDisplayed)
             {
                 selectedCharacter.MoveTo(this);
             }
@@ -135,19 +135,16 @@ public abstract class Tile : MonoBehaviour
 
     private void DisplayTileAvailability()
     {
-        avalaibiltyDisplayed = true;
         image.sprite = gridController.AvailabilitySprite;
     }
 
     private void DisplayTileAttackable()
     {
-        avalaibiltyDisplayed = true;
         image.sprite = gridController.AttackableTileSprite;
     }
     
     public void HideTileAvailability()
     {
-        avalaibiltyDisplayed = false;
         image.sprite = gridController.NormalSprite;
     }
 
@@ -155,25 +152,19 @@ public abstract class Tile : MonoBehaviour
     {
         if (!IsWalkable) return false;
         this.character = character;
-        Debug.Log(character.gameObject.name + " linked to " + gameObject.name);
         return character != null;
     }
 
     public bool UnlinkCharacter()
     {
         if (character == null) return false;
-        Debug.Log(character.gameObject.name + " unlinked from " + gameObject.name);
         character = null;
         return true;
     }
-
-    public Character GetCharacter()
-    {
-        return character;
-    }
 }
 
-public enum TileType{
+public enum TileType 
+{
     EMPTY = 0,
     OBSTACLE = 1,
     FOREST = 2,
