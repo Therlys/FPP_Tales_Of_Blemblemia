@@ -6,7 +6,7 @@ public abstract class Character : MonoBehaviour
 {
     private Tile currentTile = null;
     [SerializeField] private Vector2Int initialPosition;
-    private int healthPoints = 12;
+    private int healthPoints = 6;
     private bool isPlayable = false;
     private int movesLeft = 3;
 

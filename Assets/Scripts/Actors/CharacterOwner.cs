@@ -20,7 +20,7 @@ namespace Game
 
         public CharacterOwner()
         {
-            Players.Add(this);
+            //Players.Add(this);
         }
 
         public void Play()

@@ -26,8 +26,9 @@ public class GameController : MonoBehaviour
         if(!SceneManager.GetSceneByName(levelname).isLoaded)
             yield return SceneManager.LoadSceneAsync(levelname, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelname));
-        if (levelname == "SampleScene")
+        if (SceneManager.GetSceneByName(startingSceneName).isLoaded && startingSceneName == "SampleScene")
         {
+            Debug.Log("Loading the fucking level...");
             player1 = new HumanPlayer();
             player2 = new ComputerPlayer();
             player1.AddOwnedCharacter(GameObject.Find("Franklem").GetComponent<Franklem>());
@@ -41,38 +42,34 @@ public class GameController : MonoBehaviour
             currentPlayer = player1;
             player1.OnTurnGiven();
         }
+        
         //TODO : Hide Loading Screen
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (currentPlayer == null) return;
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            if (currentPlayer != currentPlayer.GiveTurnToNextPlayer())
-            {
-                currentPlayer = currentPlayer.GiveTurnToNextPlayer();
-                currentPlayer.OnTurnGiven();
-            }
+            currentPlayer = CharacterOwner.Players.Find(own => own is HumanPlayer);//currentPlayer.GiveTurnToNextPlayer();
+            currentPlayer.OnTurnGiven();
         }
         if (currentPlayer.HasNoMoreMovableCharacters())
         {
-            if (currentPlayer != currentPlayer.GiveTurnToNextPlayer())
-            {
-                currentPlayer = currentPlayer.GiveTurnToNextPlayer();
-                currentPlayer.OnTurnGiven();
-            }
+            currentPlayer = currentPlayer.GiveTurnToNextPlayer();
+            currentPlayer.OnTurnGiven();
         }
         else if (currentPlayer.HasWon())
         {
-            Debug.Log("Current player has won...");
             currentPlayer.Win();
+            if(SceneManager.GetSceneByName(startingSceneName).isLoaded)
+            SceneManager.UnloadSceneAsync(startingSceneName);
         }
         else if (currentPlayer.HaveAllCharactersDied())
         {
-            Debug.Log("Current player has lost...");
             currentPlayer.Lose();
         }
         else
