@@ -17308,7 +17308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementTileSprite: {fileID: 21300000, guid: e55f1a5351f5dd0458fcf4b8b12788e7, type: 3}
   normalTileSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  selectedTileSprite: {fileID: 1928014437191233578, guid: 706eefd9bedf61849a175cde2505a3b5,
+  selectedTileSprite: {fileID: 8069719877939992251, guid: 706eefd9bedf61849a175cde2505a3b5,
     type: 3}
   attackableTileSprite: {fileID: -5504790966784429809, guid: 706eefd9bedf61849a175cde2505a3b5,
     type: 3}
