@@ -7,6 +7,7 @@ namespace Game
 {
     public class CharacterOwner
     {
+        public string Name = "";
         [SerializeField] private readonly List<Character> ownedCharacters = new List<Character>();
         [SerializeField] private readonly List<Character> playableCharacters = new List<Character>();
         private bool hasLost = false;

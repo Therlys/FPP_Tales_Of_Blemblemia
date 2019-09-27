@@ -5,6 +5,8 @@ using Actors;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Utils;
 
 namespace Game
 {
@@ -35,6 +37,8 @@ namespace Game
         {
             CharacterOwner player1 = new HumanPlayer();
             CharacterOwner player2 = new ComputerPlayer();
+            player1.Name = "Leader of Allies";
+            player2.Name = "Leader of Enemies";
             GiveCharacters(GetCharactersOfType(typeof(Ally)),player1);
             GiveCharacters(GetCharactersOfType(typeof(Enemy)),player2);
             players.Add(player1);
@@ -76,6 +80,7 @@ namespace Game
             if (HasWon(currentPlayer))
             {
                 currentPlayer.Win();
+                Finder.GameController.WinDisplayText.text = currentPlayer.Name + " Won!";
                 if(SceneManager.GetActiveScene().isLoaded) SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
             }
         }
