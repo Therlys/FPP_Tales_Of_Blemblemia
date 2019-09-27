@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Collections;
+using Game;
 using UnityEngine;
 using Utils;
 
 public abstract class Character : MonoBehaviour
 {
-    private Tile currentTile = null;
     [SerializeField] private Vector2Int initialPosition;
-    private int healthPoints = 6;
-    private bool canPlay = false;
-    private int movesLeft = 3;
     private GridController gridController;
-    public bool IsCurrentlySelected => gridController.SelectedCharacter == this;
-
+    private Tile currentTile = null;
+    private readonly int movementRange;
+    private int healthPoints = Constants.DEFAULT_CHARACTER_HEALTH_POINTS;
+    private int movesLeft = Constants.NUMBER_OF_MOVES_PER_CHARACTER_PER_TURN;
+    private bool canPlay = false;
     public int MovesLeft
     {
         get => movesLeft;
         set => movesLeft = value;
     }
-
     public bool CanPlay
     {
         get => canPlay;
         set => canPlay = value;
     }
+    public bool IsCurrentlySelected => gridController.SelectedCharacter == this;
+    public bool CanMove => MovesLeft > 0;
+    public bool IsDead => healthPoints <= 0;
+    public int MovementRange => movementRange;
 
-    private readonly int range;
-    public int Range => range;
-
-    protected Character(int range)
+    protected Character(int movementRange)
     {
-        this.range = range;
+        this.movementRange = movementRange;
     }
-
     private void Awake()
     {
         gridController = Finder.GridController;
@@ -41,6 +40,11 @@ public abstract class Character : MonoBehaviour
     protected void Start()
     {
         StartCoroutine(InitPosition());
+    }
+    
+    public void ResetNumberOfMovesLeft()
+    {
+        MovesLeft = Constants.NUMBER_OF_MOVES_PER_CHARACTER_PER_TURN;
     }
 
     private void MoveTo(Vector3 position)
@@ -75,9 +79,5 @@ public abstract class Character : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public bool Died()
-    {
-        return healthPoints <= 0;
-    }
 
 }

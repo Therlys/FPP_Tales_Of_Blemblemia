@@ -330,6 +330,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingSceneName: ParabeneForest
+  Players:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1192157624
 Transform:
   m_ObjectHideFlags: 0

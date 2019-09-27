@@ -17,6 +17,7 @@ public abstract class Tile : MonoBehaviour
     private bool IsAvailable => IsWalkable && !IsOccupiedByACharacter;
     private bool IsOccupiedByACharacter => linkedCharacter != null;
     private Vector3 positionInGrid;
+    private bool islinkedCharacterNull;
     public Vector3 WorldPosition => transform.position;
 
     protected Tile(TileType tileType)
@@ -26,6 +27,7 @@ public abstract class Tile : MonoBehaviour
     
     protected virtual void Awake()
     {
+        islinkedCharacterNull = linkedCharacter == null;
         tileButton = GetComponent<Button>();
         tileImage = GetComponent<Image>();
         tileButton.onClick.AddListener(OnCellClick); 
@@ -59,7 +61,7 @@ public abstract class Tile : MonoBehaviour
                     if (IsPossibleAction)
                     {
                         gridController.SelectedCharacter.Attack(linkedCharacter);
-                        if (linkedCharacter.Died())
+                        if (linkedCharacter.IsDead)
                         {
                             linkedCharacter.Die();
                             gridController.SelectedCharacter.MoveTo(this);
@@ -88,15 +90,15 @@ public abstract class Tile : MonoBehaviour
     private void DisplayPossibleActions()
     {
         tileImage.sprite = gridController.SelectedSprite;
-        for (int i = -linkedCharacter.Range; i <= linkedCharacter.Range; i++)
+        for (int i = -linkedCharacter.MovementRange; i <= linkedCharacter.MovementRange; i++)
         {
-            for(int j = -linkedCharacter.Range; j <= linkedCharacter.Range ; j++)
+            for(int j = -linkedCharacter.MovementRange; j <= linkedCharacter.MovementRange ; j++)
             {
                 if (i != 0 || j != 0)
                 {
                     if (positionInGrid.x + i >= 0 && positionInGrid.y + j >= 0 && positionInGrid.x + i < gridController.NbColumns && positionInGrid.y + j < gridController.NbLines)
                     {
-                        if (Math.Abs(i) + Math.Abs(j) <= linkedCharacter.Range)
+                        if (Math.Abs(i) + Math.Abs(j) <= linkedCharacter.MovementRange)
                         {
                             Tile tile = gridController.GetTile((int)positionInGrid.x + i, j + (int)positionInGrid.y);
                             if (tile.IsAvailable)
@@ -142,7 +144,7 @@ public abstract class Tile : MonoBehaviour
 
     public bool UnlinkCharacter()
     {
-        if (linkedCharacter == null) return false;
+        if (islinkedCharacterNull) return false;
         linkedCharacter = null;
         return true;
     }
