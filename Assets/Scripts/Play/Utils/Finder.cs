@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using Game;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
-namespace Utils
+namespace Game
 {
+    //Authors: Jérémie Bertrand & Mike Bédard
     public static class Finder
     {
         private static GameController gameController;

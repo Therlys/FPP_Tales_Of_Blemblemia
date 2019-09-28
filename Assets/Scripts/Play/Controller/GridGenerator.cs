@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 
 namespace Game
 {
+    //Author: Mike Bédard
     public class GridGenerator : MonoBehaviour
     {
         [Header("Prefabs")]

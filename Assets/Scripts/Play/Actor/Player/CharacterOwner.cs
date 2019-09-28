@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace Game
 {
+    //Author: Mike Bédard
     public class CharacterOwner
     {
-        public string Name = "";
-        [SerializeField] private readonly List<Character> ownedCharacters = new List<Character>();
-        [SerializeField] private readonly List<Character> playableCharacters = new List<Character>();
+        public string name = "";
+        private readonly List<Character> ownedCharacters = new List<Character>();
+        private readonly List<Character> playableCharacters = new List<Character>();
         private bool hasLost = false;
+
+        public string Name => name;
 
         public bool HasLost
         {
             get => hasLost;
             set => hasLost = value;
+        }
+
+        protected CharacterOwner(string name)
+        {
+            this.name = name;
         }
 
         public void Play()
@@ -77,8 +82,7 @@ namespace Game
 
         public void OnTurnGiven()
         {
-            foreach(Character character in ownedCharacters)
-            playableCharacters.Add(character);
+            foreach(Character character in ownedCharacters) playableCharacters.Add(character);
             MakeOwnedCharactersPlayable();
         }
 

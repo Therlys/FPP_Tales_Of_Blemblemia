@@ -1,10 +1,10 @@
-﻿using System;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Utils;
+using Game;
 
+//Author: Jérémie Bertrand
 public abstract class Tile : MonoBehaviour
 {
     private Button tileButton;

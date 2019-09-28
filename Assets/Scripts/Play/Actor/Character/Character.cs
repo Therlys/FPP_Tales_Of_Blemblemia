@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Game;
 using UnityEngine;
-using Utils;
 
+//Authors: Jérémie Bertrand & Mike Bédard
 public abstract class Character : MonoBehaviour
 {
     [SerializeField] private Vector2Int initialPosition;
@@ -68,7 +67,7 @@ public abstract class Character : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         MovesLeft += 1;
-        MoveTo(Utils.Finder.GridController.GetTile(initialPosition.x, initialPosition.y));
+        MoveTo(Finder.GridController.GetTile(initialPosition.x, initialPosition.y));
     }
 
     public void Attack(Character character)

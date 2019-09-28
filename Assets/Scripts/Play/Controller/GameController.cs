@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Actors;
-using DefaultNamespace;
+﻿using System.Collections;
 using Game;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Utils;
 
+//Author: Mike Bédard
 public class GameController : MonoBehaviour
 {
     [SerializeField] private string startingSceneName = Constants.LEVEL_3_SCENE_NAME;

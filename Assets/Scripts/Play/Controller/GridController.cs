@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Authors: Jérémie Bertrand & Mike Bédard
 public class GridController : MonoBehaviour
 {
     private GridLayoutGroup gridLayoutGroup;

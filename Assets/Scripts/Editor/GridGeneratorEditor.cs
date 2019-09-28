@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Game
 {
-    
     [CustomEditor(typeof(GridGenerator))]
+    //Author: Mike Bédard
     public class GridGeneratorEditor : Editor
     {
         public override void OnInspectorGUI()

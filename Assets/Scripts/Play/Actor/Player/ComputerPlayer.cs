@@ -1,7 +1,6 @@
-﻿using Game;
-
-namespace Actors
+﻿namespace Game
 {
+    //Author: Mike Bédard
     public class ComputerPlayer : CharacterOwner
     {
         public override void Win()
@@ -12,6 +11,10 @@ namespace Actors
         public override void Lose()
         {
             base.Lose();
+        }
+
+        public ComputerPlayer() : base(Constants.AI_NAME)
+        {
         }
     }
 }
