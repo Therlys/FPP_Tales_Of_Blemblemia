@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
+using Game;
 using UnityEngine;
 
 public class Pleblem : Enemy
 {
-    public Pleblem() : base(3)
+    public Pleblem() : base(Constants.ENEMY_RANGE)
     {
     }
 }

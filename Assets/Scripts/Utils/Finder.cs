@@ -1,5 +1,7 @@
-﻿using Game;
+﻿using System.Linq;
+using Game;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Utils
 {
@@ -16,8 +18,9 @@ namespace Utils
                     gameController = GameObject.FindWithTag(Constants.GAME_CONTROLLER_TAG).GetComponent<GameController>();
                 return gameController;
             }
+            set => gameController = value;
         }
-        
+
         public static GridController GridController
         {
             get

@@ -7,9 +7,9 @@ namespace Game
 {
     public class CharacterOwner
     {
-        public static List<CharacterOwner> Players = new List<CharacterOwner>();
-        private List<Character> ownedCharacters = new List<Character>();
-        private List<Character> playableCharacters = new List<Character>();
+        public string Name = "";
+        [SerializeField] private readonly List<Character> ownedCharacters = new List<Character>();
+        [SerializeField] private readonly List<Character> playableCharacters = new List<Character>();
         private bool hasLost = false;
 
         public bool HasLost
@@ -22,7 +22,7 @@ namespace Game
         {
             for(int i = 0; i < playableCharacters.Count; i++)
             {
-                if (playableCharacters[i].CanPlay && playableCharacters[i].MovesLeft <= 0)
+                if (!playableCharacters[i].CanMove)
                 {
                     RemoveCharacterFromPlayableCharacters(playableCharacters[i]);
                 }
@@ -30,7 +30,7 @@ namespace Game
 
             for(int i = 0; i < ownedCharacters.Count; i++)
             {
-                if (ownedCharacters[i].Died())
+                if (ownedCharacters[i].IsDead)
                 {
                     RemoveOwnedCharacter(ownedCharacters[i]);
                 }
@@ -43,33 +43,9 @@ namespace Game
             hasLost = true;
         }
 
-        public void RemoveFromPlayers()
-        {
-            Players.Remove(this);
-        }
-
         public virtual void Win()
         {
             
-        }
-        
-        public bool HasWon()
-        {
-            return Players.Contains(this) && Players.Count <= 1;
-        }
-        
-        public CharacterOwner GiveTurnToNextPlayer()
-        {
-            MakeOwnedCharactersUnplayable();
-            int nextPlayerIndex = Players.IndexOf(this) + 1;
-            if (nextPlayerIndex >= Players.Count)
-            {
-                nextPlayerIndex = 0;
-            }
-            if(Players.ElementAt(nextPlayerIndex) != null)
-            return Players.ElementAt(nextPlayerIndex);
-
-            return this;
         }
 
         public void MakeOwnedCharactersUnplayable()
@@ -85,7 +61,7 @@ namespace Game
             foreach (Character character in playableCharacters)
             {
                 character.CanPlay = true;
-                character.MovesLeft = 3;
+                character.ResetNumberOfMovesLeft();
             }
         }
 

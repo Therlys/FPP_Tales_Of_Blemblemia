@@ -2,7 +2,7 @@
 {
     public class Ally : Character
     {
-        public Ally(int range) : base(range)
+        public Ally(int movementRange) : base(movementRange)
         {
         }
     }
