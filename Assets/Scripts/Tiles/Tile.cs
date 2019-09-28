@@ -12,12 +12,17 @@ public abstract class Tile : MonoBehaviour
     private Image tileImage;
     private Character linkedCharacter;
     private GridController gridController;
-    private bool IsPossibleAction => tileImage.sprite != gridController.NormalSprite;
+    
+    private bool IsPossibleAction => gridController.ACharacterIsCurrentlySelected && gridController.SelectedCharacter.CanPlay && tileImage.sprite != gridController.NormalSprite;
+    private bool LinkedCharacterCanBeAttacked => IsOccupiedByACharacter && linkedCharacter is Enemy && IsPossibleAction;
+    private bool LinkedCharacterCanBeSelected => IsOccupiedByACharacter && linkedCharacter is Ally && linkedCharacter.CanPlay;
     private bool IsWalkable => tileType != TileType.OBSTACLE;
-    private bool IsAvailable => IsWalkable && !IsOccupiedByACharacter;
+    public bool IsAvailable => IsWalkable && !IsOccupiedByACharacter;
     private bool IsOccupiedByACharacter => linkedCharacter != null;
-    private Vector3 positionInGrid;
+    private Vector2Int positionInGrid;
     public Vector3 WorldPosition => transform.position;
+    public Vector2Int LogicalPosition => positionInGrid;
+    public Character LinkedCharacter => linkedCharacter;
 
     protected Tile(TileType tileType)
     {
@@ -42,88 +47,41 @@ public abstract class Tile : MonoBehaviour
     private void OnCellClick()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        if (IsOccupiedByACharacter)
+        
+        if (LinkedCharacterCanBeSelected)
         {
-            if (!gridController.ACharacterIsCurrentlySelected)
+            gridController.SelectCharacter(linkedCharacter); 
+            gridController.DisplayPossibleActionsFrom(this);
+            return;
+        }
+        
+        if (LinkedCharacterCanBeAttacked)
+        {
+            gridController.SelectedCharacter.Attack(linkedCharacter);
+            if (linkedCharacter.Died())
             {
-                if (linkedCharacter is Ally && linkedCharacter.CanPlay)
-                {
-                    gridController.SelectCharacter(linkedCharacter);
-                    DisplayPossibleActions();
-                }
-            } 
-            else
-            {
-                if (linkedCharacter is Enemy && gridController.SelectedCharacter.CanPlay)
-                {
-                    if (IsPossibleAction)
-                    {
-                        gridController.SelectedCharacter.Attack(linkedCharacter);
-                        if (linkedCharacter.Died())
-                        {
-                            linkedCharacter.Die();
-                            gridController.SelectedCharacter.MoveTo(this);
-                        }
-                    }
-                    gridController.DeselectCharacter();
-                }
-                else if (linkedCharacter.IsCurrentlySelected)
-                {
-                    gridController.DeselectCharacter();
-                }
-                else
-                {
-                    gridController.SelectCharacter(linkedCharacter);
-                    DisplayPossibleActions();
-                }
+                linkedCharacter.Die();
+                gridController.SelectedCharacter.MoveTo(this);
             }
         }
-        else
+        else if (IsPossibleAction)
         {
-            if (gridController.ACharacterIsCurrentlySelected && IsPossibleAction) gridController.SelectedCharacter.MoveTo(this);
-            gridController.DeselectCharacter();
+            gridController.SelectedCharacter.MoveTo(this);
         }
+        gridController.DeselectCharacter();
     }
 
-    private void DisplayPossibleActions()
-    {
-        tileImage.sprite = gridController.SelectedSprite;
-        for (int i = -linkedCharacter.Range; i <= linkedCharacter.Range; i++)
-        {
-            for(int j = -linkedCharacter.Range; j <= linkedCharacter.Range ; j++)
-            {
-                if (i != 0 || j != 0)
-                {
-                    if (positionInGrid.x + i >= 0 && positionInGrid.y + j >= 0 && positionInGrid.x + i < gridController.NbColumns && positionInGrid.y + j < gridController.NbLines)
-                    {
-                        if (Math.Abs(i) + Math.Abs(j) <= linkedCharacter.Range)
-                        {
-                            Tile tile = gridController.GetTile((int)positionInGrid.x + i, j + (int)positionInGrid.y);
-                            if (tile.IsAvailable)
-                            {
-                                tile.DisplayMoveActionPossibility();
-                            }
-                            else
-                            {
-                                if (tile.linkedCharacter is Enemy)
-                                {
-                                    if(Math.Abs(i) == 1 && Math.Abs(j) == 0 || Math.Abs(i) == 0 && Math.Abs(j) == 1) tile.DisplayAttackActionPossibility();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-
-    private void DisplayMoveActionPossibility()
+    public void DisplayMoveActionPossibility()
     {
         tileImage.sprite = gridController.AvailabilitySprite;
     }
 
-    private void DisplayAttackActionPossibility()
+    public void DisplaySelectedTile()
+    {
+        tileImage.sprite = gridController.SelectedSprite;
+    }
+
+    public void DisplayAttackActionPossibility()
     {
         tileImage.sprite = gridController.AttackableTileSprite;
     }
@@ -137,12 +95,12 @@ public abstract class Tile : MonoBehaviour
     {
         if (!IsWalkable) return false;
         this.linkedCharacter = character;
-        return character != null;
+        return IsOccupiedByACharacter;
     }
 
     public bool UnlinkCharacter()
     {
-        if (linkedCharacter == null) return false;
+        if (!IsOccupiedByACharacter) return false;
         linkedCharacter = null;
         return true;
     }

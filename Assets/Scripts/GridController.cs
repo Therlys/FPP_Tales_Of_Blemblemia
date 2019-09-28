@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,9 +46,42 @@ public class GridController : MonoBehaviour
         }
     }
     
+    public void DisplayPossibleActionsFrom(Tile fromTile)
+    {
+        fromTile.DisplaySelectedTile();
+        var linkedCharacter = fromTile.LinkedCharacter;
+        for (int i = -linkedCharacter.Range; i <= linkedCharacter.Range; i++)
+        {
+            for(int j = -linkedCharacter.Range; j <= linkedCharacter.Range ; j++)
+            {
+                if (i != 0 || j != 0)
+                {
+                    Vector2Int position = fromTile.LogicalPosition + new Vector2Int(i, j);
+                    if (IsValidGridPosition(position.x, position.y))
+                    {
+                        int distance = Math.Abs(i) + Math.Abs(j);
+                        Tile tile = GetTile(position.x, position.y);
+                        if (distance <= linkedCharacter.Range && tile.IsAvailable)
+                        {
+                            tile.DisplayMoveActionPossibility();
+                        }
+                        else if (distance <= linkedCharacter.AttackRange && tile.LinkedCharacter is Enemy)
+                        {
+                            tile.DisplayAttackActionPossibility();
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public Tile GetTile(int x, int y)
     {
         return transform.GetChild(x + y * NbColumns).GetComponent<Tile>();
+    }
+    
+    public bool IsValidGridPosition(int x, int y)
+    {
+        return x >= 0 && y >= 0 && x < NbColumns && y < NbLines;
     }
 }

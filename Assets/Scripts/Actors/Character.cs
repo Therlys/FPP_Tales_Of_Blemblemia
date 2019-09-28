@@ -8,6 +8,7 @@ public abstract class Character : MonoBehaviour
     private Tile currentTile = null;
     [SerializeField] private Vector2Int initialPosition;
     private int healthPoints = 6;
+    private int attackRange = 1;
     private bool canPlay = false;
     private int movesLeft = 3;
     private GridController gridController;
@@ -17,6 +18,12 @@ public abstract class Character : MonoBehaviour
     {
         get => movesLeft;
         set => movesLeft = value;
+    }
+
+    public int AttackRange
+    {
+        get => attackRange;
+        set => attackRange = value;
     }
 
     public bool CanPlay
