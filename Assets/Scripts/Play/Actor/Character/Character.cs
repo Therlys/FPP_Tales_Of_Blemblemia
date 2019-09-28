@@ -10,6 +10,7 @@ public abstract class Character : MonoBehaviour
     private GridController gridController;
     private Tile currentTile = null;
     private readonly int movementRange;
+    private readonly int attackRange;
     private int healthPoints = Constants.DEFAULT_CHARACTER_HEALTH_POINTS;
     private int movesLeft = Constants.NUMBER_OF_MOVES_PER_CHARACTER_PER_TURN;
     private bool canPlay = false;
@@ -27,10 +28,12 @@ public abstract class Character : MonoBehaviour
     public bool CanMove => MovesLeft > 0;
     public bool IsDead => healthPoints <= 0;
     public int MovementRange => movementRange;
+    public int AttackRange => attackRange;
 
-    protected Character(int movementRange)
+    protected Character(int movementRange, int attackRange)
     {
         this.movementRange = movementRange;
+        this.attackRange = attackRange;
     }
     private void Awake()
     {

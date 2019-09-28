@@ -2,7 +2,7 @@
 {
     public class Enemy : Character
     {
-        public Enemy(int movementRange) : base(movementRange)
+        public Enemy(int movementRange, int attackRange) : base(movementRange, attackRange)
         {
         }
     }

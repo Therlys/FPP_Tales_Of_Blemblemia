@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Pleblem : Enemy
 {
-    public Pleblem() : base(Constants.ENEMY_RANGE)
+    public Pleblem() : base(Constants.ENEMY_MOVEMENT_RANGE, Constants.ENEMY_MOVEMENT_RANGE)
     {
     }
 }

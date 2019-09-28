@@ -50,9 +50,9 @@ public class GridController : MonoBehaviour
     {
         fromTile.DisplaySelectedTile();
         var linkedCharacter = fromTile.LinkedCharacter;
-        for (int i = -linkedCharacter.Range; i <= linkedCharacter.Range; i++)
+        for (int i = -linkedCharacter.MovementRange; i <= linkedCharacter.MovementRange; i++)
         {
-            for(int j = -linkedCharacter.Range; j <= linkedCharacter.Range ; j++)
+            for(int j = -linkedCharacter.MovementRange; j <= linkedCharacter.MovementRange ; j++)
             {
                 if (i != 0 || j != 0)
                 {
@@ -61,7 +61,7 @@ public class GridController : MonoBehaviour
                     {
                         int distance = Math.Abs(i) + Math.Abs(j);
                         Tile tile = GetTile(position.x, position.y);
-                        if (distance <= linkedCharacter.Range && tile.IsAvailable)
+                        if (distance <= linkedCharacter.MovementRange && tile.IsAvailable)
                         {
                             tile.DisplayMoveActionPossibility();
                         }

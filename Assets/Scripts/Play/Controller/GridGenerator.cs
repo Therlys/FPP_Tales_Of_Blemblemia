@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using Boo.Lang;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 namespace Game
 {
@@ -51,7 +43,7 @@ namespace Game
 
         private int GetMinX(BoundsInt bounds, Rect cellGridRectangle)
         {
-            int minX = ((int)bounds.size.x - (int)cellGridRectangle.width)/2;
+            int minX = (bounds.size.x - (int)cellGridRectangle.width)/2;
             if(minX < 0) minX = 0;
             return minX;
         }

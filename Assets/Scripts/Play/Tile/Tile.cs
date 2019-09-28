@@ -58,7 +58,7 @@ public abstract class Tile : MonoBehaviour
         if (LinkedCharacterCanBeAttacked)
         {
             gridController.SelectedCharacter.Attack(linkedCharacter);
-            if (linkedCharacter.Died())
+            if (linkedCharacter.IsDead)
             {
                 linkedCharacter.Die();
                 gridController.SelectedCharacter.MoveTo(this);

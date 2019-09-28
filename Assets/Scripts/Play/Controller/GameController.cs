@@ -27,4 +27,13 @@ public class GameController : MonoBehaviour
             yield return SceneManager.LoadSceneAsync(levelname, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelname));
     }
+
+    public void LeaveGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor. EditorApplication. isPlaying = false;
+#else
+        Application. Quit();
+#endif
+    }
 }

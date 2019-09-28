@@ -8,7 +8,7 @@ using Utils;
 
 public class Franklem : Ally
 {
-    public Franklem() : base(Constants.PLAYER_RANGE)
+    public Franklem() : base(Constants.PLAYER_MOVEMENT_RANGE, Constants.PLAYER_ATTACK_RANGE)
     {
     }
 }

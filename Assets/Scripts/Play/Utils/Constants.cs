@@ -4,8 +4,10 @@ namespace Game
 {
     public static class Constants
     {
-        public const int PLAYER_RANGE = 3;
-        public const int ENEMY_RANGE = 3;
+        public const int PLAYER_MOVEMENT_RANGE = 3;
+        public const int ENEMY_MOVEMENT_RANGE = 3;
+        public const int PLAYER_ATTACK_RANGE = 1;
+        public const int ENEMY_ATTACK_RANGE = 1;
         public const string LEVEL_1_SCENE_NAME = "Level1";
         public const string LEVEL_2_SCENE_NAME = "Level2";
         public const string LEVEL_3_SCENE_NAME = "ParabeneForest";
